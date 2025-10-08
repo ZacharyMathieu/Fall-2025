@@ -1,12 +1,3 @@
-/* Hide the default 'No file chosen' text next to the file input */
-input[type='file']::-webkit-file-upload-button {
-    /* No change to button itself */
-}
-
-input[type='file']::file-selector-button {
-    /* No change to button itself */
-}
-
 input[type='file']::-ms-value {
     display: none;
 }
