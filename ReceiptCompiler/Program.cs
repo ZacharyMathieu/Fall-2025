@@ -52,10 +52,9 @@ app.MapPost("/remove", async context =>
 
 app.MapPost("/upload", async context =>
 {
-    Console.WriteLine("Upload endpoint hit");
     var form = await context.Request.ReadFormAsync();
     var file = form.Files["image"];
-    if (file != null && file.Length > 0)
+    if (file != null && file.Length > 0 && !files.Contains(file.FileName))
     {
         files.Add(file.FileName);
         var uploads = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
@@ -71,7 +70,6 @@ app.MapPost("/upload", async context =>
 
 app.MapPost("/analyse", async context =>
 {
-    Console.WriteLine("Analyse endpoint hit");
     context.Response.Redirect("/");
 });
 
