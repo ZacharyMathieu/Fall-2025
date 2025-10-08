@@ -1,0 +1,15 @@
+<ul class='list-file'>
+    <li class="file-item">
+        <span class="file-name">{{filename}}</span>
+        <button class="delete-btn" onclick="deleteFile('{{filename}}')">Delete</button>
+        <script>
+            function deleteFile(filename) {
+                fetch('/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'filename=' + encodeURIComponent(filename)
+                }).then(() => window.location.reload());
+            }
+        </script>
+    </li>
+</ul>
