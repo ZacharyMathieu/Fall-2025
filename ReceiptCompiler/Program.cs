@@ -72,8 +72,18 @@ app.MapPost("/analyse", async context =>
     foreach (var file in files)
     {
         var filePath = Path.Combine(uploads, file);
-        TextExtractor.ExtractTextFromImage(filePath, "tessdata");
+        var text = TextExtractor.ExtractTextFromImage(filePath, "tessdata");
+        // var text = "WHOLE FOODS\nOrange 20$";
+
+        if (!string.IsNullOrWhiteSpace(text))
+        {
+            var chatModel = new ChatModelClient();
+            var summary = await chatModel.GetSummaryFromTextAsync(text);
+            Console.WriteLine("Summary:");
+            Console.WriteLine(summary);
+        }
     }
+
     context.Response.Redirect("/");
     await Task.CompletedTask;
 });
