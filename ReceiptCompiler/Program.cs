@@ -2,10 +2,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
-
 var app = builder.Build();
 
-// Serve static files from wwwroot and web folders
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -14,7 +12,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 app.UseRouting();
 
-var files = new HashSet<string>();
+var files = new HashSet<string>() { "2.jpg" };
 
 app.MapGet("/", async context =>
 {
@@ -56,21 +54,28 @@ app.MapPost("/upload", async context =>
     var file = form.Files["image"];
     if (file != null && file.Length > 0 && !files.Contains(file.FileName))
     {
-        files.Add(file.FileName);
         var uploads = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
         Directory.CreateDirectory(uploads);
         var filePath = Path.Combine(uploads, file.FileName);
         using (var stream = new FileStream(filePath, FileMode.Create))
         {
-            await file.CopyToAsync(stream);
+            file.CopyTo(stream);
         }
+        files.Add(file.FileName);
     }
     context.Response.Redirect("/");
 });
 
 app.MapPost("/analyse", async context =>
 {
+    var uploads = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+    foreach (var file in files)
+    {
+        var filePath = Path.Combine(uploads, file);
+        TextExtractor.ExtractTextFromImage(filePath, "tessdata");
+    }
     context.Response.Redirect("/");
+    await Task.CompletedTask;
 });
 
 app.Run();
