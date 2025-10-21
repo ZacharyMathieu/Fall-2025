@@ -2,7 +2,7 @@ using Tesseract;
 
 public class TextExtractor
 {
-    public static string ExtractTextFromImage(string imagePath, string tessdataPath)
+    public static async Task<string> ExtractTextFromImage(string imagePath, string tessdataPath)
     {
         try
         {
@@ -13,7 +13,7 @@ public class TextExtractor
                     using (var page = engine.Process(img, region: Rect.FromCoords(500, 150, 1000, 700), PageSegMode.Auto))
                     {
                         var text = page.GetText();
-                        SaveOutput(text, imagePath);
+                        await Util.SaveOutput(text, Path.GetFileNameWithoutExtension(imagePath) + ".extracted.txt");
                         return text;
                     }
                 }
@@ -24,13 +24,5 @@ public class TextExtractor
             Console.WriteLine($"Error during OCR: {ex.Message}");
             return string.Empty;
         }
-    }
-
-    private static void SaveOutput(string text, string file)
-    {
-        var output = Path.Combine(Directory.GetCurrentDirectory(), "output");
-        var outputFile = Path.Combine(output, Path.GetFileNameWithoutExtension(file) + ".extracted.txt");
-        Directory.CreateDirectory(output);
-        File.WriteAllText(outputFile, text);
     }
 }
