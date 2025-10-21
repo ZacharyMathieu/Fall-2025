@@ -21,7 +21,8 @@ public class TextExtractor
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error during OCR: {ex.Message}");
+            Console.WriteLine($"Error during OCR:");
+            Console.WriteLine(ex.Message);
             return string.Empty;
         }
     }
