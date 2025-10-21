@@ -1,3 +1,3 @@
 @echo off
 start http://localhost:5000
-.\executable\ReceiptCompiler.exe
+.\bin\Debug\net9.0\ReceiptCompiler.exe
