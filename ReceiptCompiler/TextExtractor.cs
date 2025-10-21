@@ -10,7 +10,7 @@ public class TextExtractor
             {
                 using (var img = Pix.LoadFromFile(imagePath))
                 {
-                    using (var page = engine.Process(img, region: Rect.FromCoords(500, 150, 1000, 700), PageSegMode.Auto))
+                    using (var page = engine.Process(img))
                     {
                         var text = page.GetText();
                         await Util.SaveOutput(text, Path.GetFileNameWithoutExtension(imagePath) + ".extracted.txt");

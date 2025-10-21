@@ -12,7 +12,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 app.UseRouting();
 
-var files = new HashSet<string>() { "2.jpg" };
+var files = new HashSet<string>();
 
 app.MapGet("/", async context =>
 {
@@ -78,6 +78,9 @@ app.MapPost("/analyse", async context =>
         {
             var chatModel = new ChatModelClient();
             var summary = await chatModel.GetSummaryFromTextAsync(text, Path.GetFileNameWithoutExtension(file));
+        } else
+        {
+            Console.WriteLine($"No text extracted from {file}, skipping analysis.");
         }
     }
 
