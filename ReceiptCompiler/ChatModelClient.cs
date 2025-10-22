@@ -43,12 +43,13 @@ public class ChatModelClient
 
     private static string CreatePrompt(string content)
     {
-        return $"[[\n{content}\n]]\nThe section above contains a [[receipt]]."
+        return "The [[section]] below contains a receipt."
         + "\nFind the store's name, the items purchased, their prices and the total and put them in the format:"
         + "\n[SOURCE: <store name>, ITEMS: <item1> <price1>, <item2> <price2>, ..., TOTAL: <total amount>]."
         + "\nIf any of this information is missing, leave it out."
         + "\nIf there is information, you MUST add the SOURCE, ITEMS and TOTAL tags."
-        + "\nDo not add any additional explanation.";
+        + "\nDo not add any additional explanation."
+        + $"\n[[\n{content}\n]]";
     }
 
     private static string CleanResponse(string response)

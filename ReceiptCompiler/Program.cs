@@ -12,7 +12,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 app.UseRouting();
 
-var files = new HashSet<string>();
+var files = new HashSet<string>() { "test3.jfif" };
 
 app.MapGet("/", async context =>
 {
@@ -72,13 +72,15 @@ app.MapPost("/analyse", async context =>
     foreach (var file in files)
     {
         var filePath = Path.Combine(uploads, file);
-        var text = await TextExtractor.ExtractTextFromImage(filePath, "tessdata");
+        var bounds = Clustering.GetClusterBounds(filePath);
+        var text = await TextExtractor.ExtractTextFromImage(filePath, "tessdata", bounds);
 
         if (!string.IsNullOrWhiteSpace(text))
         {
             var chatModel = new ChatModelClient();
             var summary = await chatModel.GetSummaryFromTextAsync(text, Path.GetFileNameWithoutExtension(file));
-        } else
+        }
+        else
         {
             Console.WriteLine($"No text extracted from {file}, skipping analysis.");
         }

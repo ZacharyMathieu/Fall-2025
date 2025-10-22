@@ -2,22 +2,16 @@ using Tesseract;
 
 public class TextExtractor
 {
-    public static async Task<string> ExtractTextFromImage(string imagePath, string tessdataPath)
+    public static async Task<string> ExtractTextFromImage(string imagePath, string tessdataPath, Cluster cluster)
     {
         try
         {
-            using (var engine = new TesseractEngine(tessdataPath, "eng", EngineMode.Default))
-            {
-                using (var img = Pix.LoadFromFile(imagePath))
-                {
-                    using (var page = engine.Process(img))
-                    {
-                        var text = page.GetText();
-                        await Util.SaveOutput(text, Path.GetFileNameWithoutExtension(imagePath) + ".extracted.txt");
-                        return text;
-                    }
-                }
-            }
+            var img = Pix.LoadFromFile(imagePath).ConvertRGBToGray();
+            var engine = new TesseractEngine(tessdataPath, "fra", EngineMode.Default);
+            var page = engine.Process(img, cluster.ToRect(), PageSegMode.SingleBlock);
+            var text = page.GetText();
+            await Util.SaveOutput(text, Path.GetFileNameWithoutExtension(imagePath) + ".extracted.txt");
+            return text;
         }
         catch (Exception ex)
         {
