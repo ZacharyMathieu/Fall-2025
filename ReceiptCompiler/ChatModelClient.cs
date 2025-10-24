@@ -36,7 +36,7 @@ public class ChatModelClient
         }
         catch (HttpRequestException ex)
         {
-            Console.WriteLine($"Error during chat model request: {ex.Message}");
+            Console.WriteLine($"Error during chat model request:\n{ex.Message}");
             return string.Empty;
         }
     }

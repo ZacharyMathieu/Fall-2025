@@ -13,7 +13,6 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseRouting();
 
 var images = new HashSet<string>() { };
-// var images = new HashSet<string>() { "test3.jfif" };
 
 app.MapGet("/", async context =>
 {
@@ -52,17 +51,25 @@ app.MapPost("/remove", async context =>
 app.MapPost("/upload", async context =>
 {
     var form = await context.Request.ReadFormAsync();
-    var file = form.Files["image"];
-    if (file != null && file.Length > 0 && !images.Contains(file.FileName))
+    if (form.Files.Count == 0)
     {
-        var uploads = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-        Directory.CreateDirectory(uploads);
-        var filePath = Path.Combine(uploads, file.FileName);
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        context.Response.Redirect("/");
+        return;
+    }
+
+    foreach (var file in form.Files)
+    {
+        if (file != null && file.Length > 0)
         {
-            file.CopyTo(stream);
+            var uploads = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+            Directory.CreateDirectory(uploads);
+            var filePath = Path.Combine(uploads, file.FileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+            images.Add(file.FileName);
         }
-        images.Add(file.FileName);
     }
     context.Response.Redirect("/");
 });
