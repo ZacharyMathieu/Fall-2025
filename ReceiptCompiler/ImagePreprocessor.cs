@@ -4,7 +4,7 @@ class ImageProprocessor
 {
     private const float resizeFactor = 4f;
     private const int blurKernelSize = 13;
-    private const int thresholdValue = 200;
+    private const int thresholdValue = 190;
 
     public static void PreprocessImage(string imagePath)
     {

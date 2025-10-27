@@ -1,0 +1,1 @@
+ollama stop llama3.1
