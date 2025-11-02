@@ -1,4 +1,5 @@
 /uploads
 /obj
 /output
-/bin/Debug
+/bin
+!/bin/Release/net9.0/win-x64/publish
